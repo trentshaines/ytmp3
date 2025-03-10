@@ -29,6 +29,21 @@ def download_youtube_audio(url):
         'legacyserverconnect': True,
         'prefer_insecure': True,
         'user_agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36',
+        'socket_timeout': 30,
+        'retries': 10,
+        'fragment_retries': 10,
+        'file_access_retries': 10,
+        'extractor_retries': 10,
+        'retry_sleep': 5,
+        'retry_sleep_functions': {'fragment': lambda n: 5 * (n + 1)},
+        'sleep_interval': 5,
+        'max_sleep_interval': 30,
+        'sleep_interval_requests': 3,
+        'throttledratelimit': 100000,
+        'ratelimit': 100000,
+        'no_warnings': False,
+        'verbose': True,
+        'update': True,
     }
     
     with yt_dlp.YoutubeDL(ydl_opts) as ydl:
