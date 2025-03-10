@@ -36,6 +36,7 @@ def download_youtube_audio(url):
         'format_sort': ['abr', 'asr', 'ext', 'filesize', 'fps', 'height', 'tbr', 'vbr', 'width'],
         'prefer_insecure': True,
         'legacyserverconnect': True,
+        'proxy': 'http://proxy.proxyscrape.com/v2/?request=getproxies&protocol=http&timeout=10000&country=all&ssl=all&anonymity=all',
     }
     
     with yt_dlp.YoutubeDL(ydl_opts) as ydl:
