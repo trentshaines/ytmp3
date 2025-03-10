@@ -31,6 +31,10 @@ def download_youtube_audio(url):
     with yt_dlp.YoutubeDL(ydl_opts) as ydl:
         try:
             info = ydl.extract_info(url, download=True)
+            if info is None:
+                return {'error': 'Failed to extract video information'}
+            if 'title' not in info:
+                return {'error': 'Could not get video title'}
             return {
                 'title': info['title'],
                 'filename': f"{info['title']}.mp3",
