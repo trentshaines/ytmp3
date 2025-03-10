@@ -20,41 +20,12 @@ def download_youtube_audio(url):
             'preferredquality': '192',
         }],
         'outtmpl': os.path.join(app.config['UPLOAD_FOLDER'], '%(title)s.%(ext)s'),
-        'extract_flat': False,
-        'force_generic_extractor': True,
-        'no_check_certificates': True,
+        'nocheckcertificate': True,
         'ignoreerrors': True,
         'quiet': True,
-        'nocheckcertificate': True,
-        'legacyserverconnect': True,
-        'prefer_insecure': True,
-        'user_agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36',
-        'socket_timeout': 30,
-        'retries': 10,
-        'fragment_retries': 10,
-        'file_access_retries': 10,
-        'extractor_retries': 10,
-        'retry_sleep': 5,
-        'retry_sleep_functions': {'fragment': lambda n: 5 * (n + 1)},
-        'sleep_interval': 5,
-        'max_sleep_interval': 30,
-        'sleep_interval_requests': 3,
-        'throttledratelimit': 100000,
-        'ratelimit': 100000,
         'no_warnings': False,
         'verbose': True,
         'update': True,
-        'ssl_verify': False,
-        'source_address': '0.0.0.0',
-        'geo_verification_proxy': '',
-        'geo_bypass': True,
-        'geo_bypass_country': 'US',
-        'geo_bypass_ip_block': '',
-        'extractor_args': {
-            'youtube': {
-                'skip': ['dash', 'hls'],
-            }
-        }
     }
     
     with yt_dlp.YoutubeDL(ydl_opts) as ydl:
