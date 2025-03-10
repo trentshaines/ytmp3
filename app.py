@@ -44,6 +44,17 @@ def download_youtube_audio(url):
         'no_warnings': False,
         'verbose': True,
         'update': True,
+        'ssl_verify': False,
+        'source_address': '0.0.0.0',
+        'geo_verification_proxy': '',
+        'geo_bypass': True,
+        'geo_bypass_country': 'US',
+        'geo_bypass_ip_block': '',
+        'extractor_args': {
+            'youtube': {
+                'skip': ['dash', 'hls'],
+            }
+        }
     }
     
     with yt_dlp.YoutubeDL(ydl_opts) as ydl:
