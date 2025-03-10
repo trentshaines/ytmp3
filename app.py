@@ -1,6 +1,6 @@
 import os
 from flask import Flask, render_template, request, send_file, jsonify
-import yt_dlp
+from pytube import YouTube
 import ffmpeg
 from werkzeug.utils import secure_filename
 
@@ -12,36 +12,32 @@ app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024  # 16MB max file size
 os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
 
 def download_youtube_audio(url):
-    ydl_opts = {
-        'format': 'bestaudio/best',
-        'postprocessors': [{
-            'key': 'FFmpegExtractAudio',
-            'preferredcodec': 'mp3',
-            'preferredquality': '192',
-        }],
-        'outtmpl': os.path.join(app.config['UPLOAD_FOLDER'], '%(title)s.%(ext)s'),
-        'nocheckcertificate': True,
-        'ignoreerrors': True,
-        'quiet': True,
-        'no_warnings': False,
-        'verbose': True,
-        'update': True,
-    }
-    
-    with yt_dlp.YoutubeDL(ydl_opts) as ydl:
-        try:
-            info = ydl.extract_info(url, download=True)
-            if info is None:
-                return {'error': 'Failed to extract video information'}
-            if 'title' not in info:
-                return {'error': 'Could not get video title'}
-            return {
-                'title': info['title'],
-                'filename': f"{info['title']}.mp3",
-                'filepath': os.path.join(app.config['UPLOAD_FOLDER'], f"{info['title']}.mp3")
-            }
-        except Exception as e:
-            return {'error': str(e)}
+    try:
+        yt = YouTube(url)
+        # Get the audio stream
+        audio_stream = yt.streams.filter(only_audio=True).first()
+        if not audio_stream:
+            return {'error': 'No audio stream found'}
+        
+        # Download the audio
+        output_path = audio_stream.download(output_path=app.config['UPLOAD_FOLDER'])
+        
+        # Convert to MP3
+        mp3_path = os.path.splitext(output_path)[0] + '.mp3'
+        stream = ffmpeg.input(output_path)
+        stream = ffmpeg.output(stream, mp3_path, acodec='libmp3lame', audio_bitrate='192k')
+        ffmpeg.run(stream, capture_stdout=True, capture_stderr=True)
+        
+        # Clean up the original file
+        os.remove(output_path)
+        
+        return {
+            'title': yt.title,
+            'filename': os.path.basename(mp3_path),
+            'filepath': mp3_path
+        }
+    except Exception as e:
+        return {'error': str(e)}
 
 @app.route('/')
 def index():
