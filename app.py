@@ -20,12 +20,15 @@ def download_youtube_audio(url):
             'preferredquality': '192',
         }],
         'outtmpl': os.path.join(app.config['UPLOAD_FOLDER'], '%(title)s.%(ext)s'),
-        'proxy': 'http://proxy.proxyscrape.com/v2/?request=getproxies&protocol=http&timeout=10000&country=all&ssl=all&anonymity=all',
         'extract_flat': False,
         'force_generic_extractor': True,
         'no_check_certificates': True,
         'ignoreerrors': True,
         'quiet': True,
+        'nocheckcertificate': True,
+        'legacyserverconnect': True,
+        'prefer_insecure': True,
+        'user_agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36',
     }
     
     with yt_dlp.YoutubeDL(ydl_opts) as ydl:
@@ -71,5 +74,5 @@ def download(filename):
         return jsonify({'error': str(e)}), 404
 
 if __name__ == '__main__':
-    port = int(os.environ.get('PORT', 5001))
+    port = int(os.environ.get('PORT', 5002))
     app.run(host='0.0.0.0', port=port, debug=False) 
