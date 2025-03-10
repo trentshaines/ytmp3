@@ -1,10 +1,9 @@
 services:
   - type: web
     name: ytmp3
-    env: docker
-    dockerfilePath: ./Dockerfile
-    dockerContext: .
-    buildCommand: docker build -t ytmp3 .
+    env: python
+    buildCommand: pip install -r requirements.txt
+    startCommand: gunicorn app:app
     envVars:
       - key: PYTHON_VERSION
         value: 3.9.0
@@ -14,5 +13,4 @@ services:
         - requirements.txt
         - templates/**
         - static/**
-        - Dockerfile
         - render.yaml 
