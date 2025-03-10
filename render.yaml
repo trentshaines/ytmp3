@@ -4,6 +4,7 @@ services:
     env: docker
     dockerfilePath: ./Dockerfile
     dockerContext: .
+    buildCommand: docker build -t ytmp3 .
     envVars:
       - key: PYTHON_VERSION
         value: 3.9.0
