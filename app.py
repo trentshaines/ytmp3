@@ -12,12 +12,6 @@ app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024  # 16MB max file size
 os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
 
 def download_youtube_audio(url):
-    # Update yt-dlp first
-    try:
-        yt_dlp.YoutubeDL().update()
-    except Exception as e:
-        print(f"Update failed: {e}")
-
     ydl_opts = {
         'format': 'bestaudio/best',
         'postprocessors': [{
@@ -26,16 +20,6 @@ def download_youtube_audio(url):
             'preferredquality': '192',
         }],
         'outtmpl': os.path.join(app.config['UPLOAD_FOLDER'], '%(title)s.%(ext)s'),
-        'no_check_certificates': True,
-        'ignoreerrors': True,
-        'no_warnings': True,
-        'quiet': True,
-        'extract_flat': False,
-        'force_generic_extractor': True,
-        'user_agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36',
-        'format_sort': ['abr', 'asr', 'ext', 'filesize', 'fps', 'height', 'tbr', 'vbr', 'width'],
-        'prefer_insecure': True,
-        'legacyserverconnect': True,
         'proxy': 'http://proxy.proxyscrape.com/v2/?request=getproxies&protocol=http&timeout=10000&country=all&ssl=all&anonymity=all',
     }
     
