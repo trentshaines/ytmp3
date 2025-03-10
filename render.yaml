@@ -4,8 +4,6 @@ services:
     env: docker
     dockerfilePath: ./Dockerfile
     dockerContext: .
-    buildCommand: null
-    startCommand: null
     envVars:
       - key: PYTHON_VERSION
         value: 3.9.0
